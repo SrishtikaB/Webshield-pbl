@@ -1,27 +1,30 @@
 # WebShield – Rule-Based URL Link Checker
 
- Project Description
+1. Project Description
 WebShield is a rule-based phishing detection system that analyzes URLs using predefined security rules. It assigns a score based on suspicious features and classifies links as Safe, Suspicious, or Phishing.
 
- Problem Statement
+2.Problem Statement
 Many users fall victim to phishing and malicious links. It is difficult for common users to identify unsafe URLs. This project aims to check the safety of a URL using predefined rules.
 
- Features
-- Detects IP-based URLs
-- Checks HTTPS usage
-- Identifies suspicious keywords
-- Checks URL length
-- Detects suspicious TLDs
-- Provides classification result
+3.Detection Rules
+IP address in URL
+Presence of @ symbol
+Suspicious keywords (login, verify, secure, etc.)
+Brand impersonation patterns
+Suspicious domain extensions
+Long or complex domain names
+Multiple subdomains
+Hyphen abuse
+Punycode (homograph attacks)
 
-Technologies Used
+4.Technologies Used
 - Python
 - HTML
 - GitHub Pages
 - Replit
 
- Live Website
+5.Live Website
 https://srishtikab.github.io/Webshield-pbl/
 
-## 💻 Demo Link
+6.Demo Link
 https://replit.com/@srishtikaB/Webshield
