@@ -11,6 +11,7 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+
 body {
     background-color: #020617;
     color: #f8fafc;
@@ -75,7 +76,7 @@ body {
     </a>
 </section>
 
-<!-- PROBLEM & LITERATURE -->
+<!-- PROBLEM, RESEARCH GAP & LITERATURE REVIEW -->
 <section class="grid md:grid-cols-2 gap-12">
 
     <div class="glass p-10 rounded-3xl border-l-4 border-blue-600">
@@ -88,6 +89,7 @@ body {
     </div>
 
     <div class="space-y-6">
+
         <div class="glass p-7 rounded-3xl border-r-4 border-blue-500/50">
             <h3 class="text-blue-400 font-bold text-xs uppercase tracking-widest mb-2">
                 Research Gap
@@ -98,6 +100,31 @@ body {
                 transparency, and rule-based scoring.
             </p>
         </div>
+
+        <div class="glass p-7 rounded-3xl border-r-4 border-purple-500/50">
+            <h3 class="text-purple-400 font-bold text-xs uppercase tracking-widest mb-2">
+                Literature Review
+            </h3>
+            <p class="text-sm text-slate-400 mb-4 leading-relaxed">
+                Several studies have proposed phishing detection using Machine Learning
+                algorithms such as Random Forest, SVM, and Neural Networks.
+                These approaches achieve high accuracy but often lack interpretability.
+            </p>
+
+            <ul class="list-disc pl-5 text-sm text-slate-400 space-y-2">
+                <li>URL-based feature extraction is commonly used for detection.</li>
+                <li>Lexical features like domain length and special characters are strong indicators.</li>
+                <li>IP-based URLs and suspicious keywords frequently appear in phishing attacks.</li>
+                <li>Machine learning improves accuracy but reduces transparency.</li>
+            </ul>
+
+            <p class="text-sm text-slate-400 mt-4 leading-relaxed">
+                Based on these studies, this project implements a rule-based model
+                that uses explainable scoring instead of black-box predictions,
+                ensuring clarity and user trust.
+            </p>
+        </div>
+
     </div>
 </section>
 
@@ -129,6 +156,7 @@ Safe URLs typically scored below 20.
 </div>
 
 <div class="mt-10 text-left max-w-3xl mx-auto text-slate-400 leading-relaxed">
+
 <h3 class="text-white font-bold mb-4">System Interpretation</h3>
 <ul class="list-disc pl-6 space-y-3">
 <li>Each triggered rule adds a specific score.</li>
@@ -143,8 +171,8 @@ Safe URLs typically scored below 20.
 <li>Cannot detect newly registered domains.</li>
 <li>May generate false positives.</li>
 </ul>
-</div>
 
+</div>
 </section>
 
 <!-- FOOTER -->
