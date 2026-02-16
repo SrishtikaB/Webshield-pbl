@@ -27,4 +27,4 @@ Punycode (homograph attacks)
 https://srishtikab.github.io/Webshield-pbl/
 
 6.Demo Link
-https://replit.com/@srishtikaB/Webshield
+https://colab.research.google.com/drive/1j-kl9-O0xJ1x7CJSEaVcxPjFDQ9yJc1k?usp=sharing
