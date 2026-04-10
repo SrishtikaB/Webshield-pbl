@@ -2,95 +2,104 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>WebShield - Cyber Security</title>
+<title>WebShield - Phishing Detector</title>
 
 <style>
-    body {
-        margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient(135deg, #020617, #0f172a);
-        color: white;
-        text-align: center;
-    }
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #020617, #0f172a);
+    color: white;
+    text-align: center;
+}
 
-    h1 {
-        margin-top: 40px;
-        font-size: 42px;
-        background: linear-gradient(90deg, #38bdf8, #a855f7);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
+h1 {
+    margin-top: 40px;
+    font-size: 42px;
+    background: linear-gradient(90deg, #38bdf8, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
-    .container {
-        margin-top: 50px;
-    }
+p {
+    color: #94a3b8;
+}
 
-    input {
-        width: 400px;
-        padding: 14px;
-        border-radius: 12px;
-        border: none;
-        font-size: 16px;
-        outline: none;
-    }
+.container {
+    margin-top: 40px;
+}
 
-    button {
-        margin-top: 15px;
-        padding: 14px 30px;
-        border-radius: 12px;
-        border: none;
-        font-weight: bold;
-        background: linear-gradient(90deg, #38bdf8, #6366f1);
-        color: white;
-        cursor: pointer;
-        transition: 0.3s;
-    }
+input {
+    width: 400px;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+}
 
-    button:hover {
-        transform: scale(1.05);
-    }
+button {
+    margin-top: 15px;
+    padding: 14px 30px;
+    border-radius: 12px;
+    border: none;
+    font-weight: bold;
+    background: linear-gradient(90deg, #38bdf8, #6366f1);
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
-    .card {
-        margin-top: 40px;
-        width: 420px;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 25px;
-        border-radius: 20px;
-        backdrop-filter: blur(20px);
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        display: none;
-    }
+button:hover {
+    transform: scale(1.05);
+}
 
-    .safe {
-        border-left: 6px solid #22c55e;
-    }
+.card {
+    margin-top: 40px;
+    width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 25px;
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: none;
+}
 
-    .fake {
-        border-left: 6px solid #ef4444;
-    }
+.safe {
+    border-left: 6px solid #22c55e;
+}
 
-    .suspicious {
-        border-left: 6px solid #facc15;
-    }
+.fake {
+    border-left: 6px solid #ef4444;
+}
 
-    .badge {
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-weight: bold;
-        display: inline-block;
-        margin-bottom: 10px;
-    }
+.suspicious {
+    border-left: 6px solid #facc15;
+}
 
-    .green { background: #14532d; }
-    .red { background: #7f1d1d; }
-    .yellow { background: #713f12; }
+.badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 10px;
+}
 
-    ul {
-        text-align: left;
-        margin-top: 10px;
-    }
+.green { background: #14532d; }
+.red { background: #7f1d1d; }
+.yellow { background: #713f12; }
+
+ul {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.loader {
+    margin-top: 20px;
+    display: none;
+}
 </style>
 </head>
 
@@ -103,15 +112,26 @@
     <input type="text" id="urlInput" placeholder="Enter URL (https://...)" />
     <br>
     <button onclick="checkURL()">Analyze URL</button>
+
+    <div class="loader" id="loader">Checking...</div>
 </div>
 
 <div id="resultCard" class="card"></div>
 
 <script>
+
 function checkURL() {
     let url = document.getElementById("urlInput").value;
+    let loader = document.getElementById("loader");
+    let card = document.getElementById("resultCard");
 
-    fetch("http://127.0.0.1:5000/check", {
+    loader.style.display = "block";
+    card.style.display = "none";
+
+    fetch("https://webshield-pbl.onrender.com/check")
+    .then(() => {}) // just to wake server if sleeping
+
+    fetch("https://webshield-pbl.onrender.com/check", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({url: url})
@@ -119,7 +139,7 @@ function checkURL() {
     .then(res => res.json())
     .then(data => {
 
-        let card = document.getElementById("resultCard");
+        loader.style.display = "none";
 
         let className = "";
         let badgeColor = "";
@@ -143,6 +163,7 @@ function checkURL() {
 
             <h2>Score: ${data.score} | Risk: ${data.risk}%</h2>
 
+            <p><b>URL:</b> ${data.url}</p>
             <p><b>Domain:</b> ${data.domain}</p>
             <p><b>Length:</b> ${data.length}</p>
             <p><b>Dots:</b> ${data.dots}</p>
@@ -154,8 +175,13 @@ function checkURL() {
                 ${data.reasons.map(r => `<li>${r}</li>`).join("")}
             </ul>
         `;
+    })
+    .catch(err => {
+        loader.style.display = "none";
+        alert("Error connecting to backend");
     });
 }
+
 </script>
 
 </body>
