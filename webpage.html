@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PBL Presentation | 2026</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+body { background-color: #020617; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+.glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
+.gradient-text { background: linear-gradient(90deg,#60a5fa,#a855f7); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+/* TIMER */
+#timerContainer {
+background:#fff;
+color:#020617;
+border:3px solid #3b82f6;
+position:fixed;
+bottom:30px;
+right:30px;
+padding:15px 25px;
+border-radius:20px;
+font-weight:bold;
+z-index:1000;
+}
+</style>
+</head>
+
+<body onload="startTimer()">
+
+<!-- TIMER -->
+<div id="timerContainer">
+⏳ <span id="displayTime">00:00</span>
+</div>
+
+<!-- MAIN -->
+<main style="max-width:1100px;margin:auto;padding:50px">
+
+<!-- TITLE -->
+<section style="text-align:center;margin-bottom:60px">
+<h1 class="gradient-text" style="font-size:50px">WebShield: Phishing URL Detection System</h1>
+
+<p style="margin-top:20px;color:#94a3b8">
+"A lightweight rule-based cybersecurity system designed to detect phishing URLs in real-time by analyzing structural and behavioral features of web links, improving user safety and preventing credential theft."
+</p>
+</section>
+
+<!-- PROBLEM -->
+<section class="glass" style="padding:30px;margin-bottom:40px">
+<h2>Problem Statement</h2>
+<p style="color:#94a3b8;margin-top:10px">
+Phishing attacks are one of the most widespread cyber threats where attackers create fake websites that mimic legitimate platforms to steal sensitive information such as passwords, credit card details, and personal data. 
+Users often fail to distinguish between genuine and malicious URLs due to their similar appearance. 
+Existing solutions either rely heavily on machine learning models or browser-based detection, which may not always be fast or accessible. 
+Hence, there is a need for a simple, fast, and efficient system that can detect phishing links in real time without heavy computation.
+</p>
+</section>
+
+<!-- LITERATURE + GAP -->
+<section style="display:flex;gap:20px;margin-bottom:40px">
+
+<div class="glass" style="flex:1;padding:20px">
+<h3>Literature Review / Market Research</h3>
+<p style="color:#94a3b8">
+Existing research shows that phishing detection systems commonly use machine learning algorithms such as Decision Trees, Random Forest, and Neural Networks. 
+These systems analyze features like URL length, domain age, HTTPS usage, and suspicious keywords. 
+However, they require large datasets, training time, and computational power. 
+Popular tools like Google Safe Browsing and antivirus software also detect phishing but are not always real-time or transparent.
+</p>
+</div>
+
+<div class="glass" style="flex:1;padding:20px">
+<h3>Research Gap / Innovation</h3>
+<p style="color:#94a3b8">
+Most existing systems are complex and resource-intensive. 
+Our approach introduces a rule-based system that eliminates the need for training datasets while still achieving high accuracy. 
+It is faster, explainable, lightweight, and suitable for real-time applications such as browser extensions or small-scale security tools.
+</p>
+</div>
+
+</section>
+
+<!-- METHODOLOGY -->
+<section style="margin-bottom:50px">
+<h2 style="text-align:center">System Methodology</h2>
+
+<div style="display:flex;gap:20px;margin-top:30px">
+
+<div class="glass" style="flex:1;padding:20px;text-align:center">
+<h4>Dataset / Input</h4>
+<p style="color:#94a3b8">
+A total of 300 URLs were tested:
+<br>• 100 Legitimate URLs  
+<br>• 100 Phishing URLs  
+<br>• 100 Suspicious URLs  
+
+The URLs were collected from public datasets and manually verified. 
+Preprocessing included removing duplicates and normalizing URL formats.
+</p>
+</div>
+
+<div class="glass" style="flex:1;padding:20px;text-align:center">
+<h4>Model / Architecture</h4>
+<p style="color:#94a3b8">
+The system uses a rule-based scoring mechanism:
+<br>• Checks URL length  
+<br>• Detects special characters (@, -, _)  
+<br>• Verifies HTTPS usage  
+<br>• Identifies suspicious keywords  
+
+Each feature contributes to a score, and the final classification is:
+Safe / Suspicious / Phishing.
+</p>
+</div>
+
+<div class="glass" style="flex:1;padding:20px;text-align:center">
+<h4>Live Execution</h4>
+<a href="https://srishtikab.github.io/Webshield-pbl/" target="_blank"
+style="background:#22c55e;padding:10px 20px;border-radius:20px;text-decoration:none;color:white">
+VIEW CODE / DEMO
+</a>
+</div>
+
+</div>
+</section>
+
+<!-- RESULTS -->
+<section class="glass" style="padding:30px">
+<h2 style="text-align:center">Results & Analysis</h2>
+
+<div style="display:flex;gap:40px;margin-top:30px">
+
+<canvas id="chart" style="width:50%"></canvas>
+
+<div>
+<h3>Accuracy / Performance</h3>
+<h1 style="color:#3b82f6">90%</h1>
+
+<p style="color:#94a3b8">
+Out of 300 URLs tested:
+<br>✔ 100 Legitimate correctly identified  
+<br>✔ 90 Phishing correctly detected  
+<br>✔ 80 Suspicious correctly flagged  
+
+The system achieved an overall accuracy of 90%. 
+It provides fast results and effectively detects most phishing patterns without machine learning.
+</p>
+</div>
+
+</div>
+</section>
+
+<!-- TEAM -->
+<section style="text-align:center;margin-top:50px">
+<h3>Academic Credits</h3>
+
+<p><b>Project Guide:</b> Dr. Aditya Sinha</p>
+<p><b>Student:</b> Srishtika Bhatnagar</p>
+<p><b>Reg No:</b> 2427030410</p>
+
+<p style="margin-top:20px;color:#94a3b8">
+Manipal University Jaipur  
+<br>Department of Computer Science & Engineering • 2026
+</p>
+</section>
+
+</main>
+
+<script>
+// TIMER
+let sec=0;
+function startTimer(){
+setInterval(()=>{
+sec++;
+let m=Math.floor(sec/60);
+let s=sec%60;
+document.getElementById("displayTime").innerText=
+`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+},1000);
+}
+
+// GRAPH
+new Chart(document.getElementById("chart"),{
+type:"bar",
+data:{
+labels:["Legitimate","Phishing","Suspicious"],
+datasets:[{
+label:"URL Analysis",
+data:[100,90,80],
+backgroundColor:["#22c55e","#ef4444","#eab308"]
+}]
+}
+});
+</script>
+
+</body>
+</html>
