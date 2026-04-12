@@ -2,274 +2,186 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WebShield | PBL 2026</title>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<title>WebShield - Phishing Detector</title>
 
 <style>
 body {
     margin: 0;
-    background: #020617;
     font-family: 'Segoe UI', sans-serif;
-    color: #f8fafc;
-}
-
-.container {
-    max-width: 1100px;
-    margin: auto;
-    padding: 50px 20px;
+    background: linear-gradient(135deg, #020617, #0f172a);
+    color: white;
+    text-align: center;
 }
 
 h1 {
-    text-align: center;
-    font-size: 55px;
-    background: linear-gradient(90deg,#60a5fa,#a855f7);
+    margin-top: 40px;
+    font-size: 42px;
+    background: linear-gradient(90deg, #38bdf8, #a855f7);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.subtitle {
-    max-width: 700px;
-    margin: auto;
-    border-left: 3px solid #3b82f6;
-    padding-left: 15px;
+p {
     color: #94a3b8;
-    margin-top: 20px;
 }
 
-.glass {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 25px;
-    padding: 35px;
+.container {
     margin-top: 40px;
-    box-shadow: 0 0 20px rgba(99,102,241,0.2);
 }
 
-.row {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
+input {
+    width: 400px;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    outline: none;
 }
 
-.timer {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: white;
-    color: black;
-    padding: 10px 20px;
-    border-radius: 15px;
-    border: 3px solid #3b82f6;
+button {
+    margin-top: 15px;
+    padding: 14px 30px;
+    border-radius: 12px;
+    border: none;
     font-weight: bold;
+    background: linear-gradient(90deg, #38bdf8, #6366f1);
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
 }
-.center { text-align:center; }
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.card {
+    margin-top: 40px;
+    width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 25px;
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: none;
+}
+
+.safe {
+    border-left: 6px solid #22c55e;
+}
+
+.fake {
+    border-left: 6px solid #ef4444;
+}
+
+.suspicious {
+    border-left: 6px solid #facc15;
+}
+
+.badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.green { background: #14532d; }
+.red { background: #7f1d1d; }
+.yellow { background: #713f12; }
+
+ul {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.loader {
+    margin-top: 20px;
+    display: none;
+}
 </style>
 </head>
 
-<body onload="startTimer()">
+<body>
 
-<div class="timer">⏳ <span id="time">00:00</span></div>
+<h1>🔐 WebShield</h1>
+<p>Advanced Phishing URL Detection System</p>
 
 <div class="container">
+    <input type="text" id="urlInput" placeholder="Enter URL (https://...)" />
+    <br>
+    <button onclick="checkURL()">Analyze URL</button>
 
-<h1>WebShield</h1>
-
-<p class="subtitle">
-A rule-based phishing detection system that analyzes URLs and classifies them as Safe, Suspicious, or Phishing.
-</p>
-
-<!-- PROBLEM -->
-<div class="glass">
-<h2>Problem Statement</h2>
-<p style="color:#94a3b8;line-height:1.7">
-Phishing attacks have become one of the most common cybersecurity threats, where attackers create fake websites that closely resemble legitimate ones to steal sensitive user information. Traditional detection methods such as blacklist-based systems fail to detect newly generated phishing URLs, while machine learning approaches require large datasets and computational resources. There is a need for a lightweight, fast, and explainable system that can detect phishing links in real time without complex dependencies. This project aims to address this problem by providing an efficient rule-based URL analysis system.
-</p>
+    <div class="loader" id="loader">Checking...</div>
 </div>
 
-<!-- LITERATURE -->
-<div class="glass">
-<h2>Literature Review</h2>
-<p style="color:#94a3b8;line-height:1.7">
-Phishing detection has been widely studied using both blacklist-based and machine learning approaches. Traditional methods like Google Safe Browsing rely on databases of known malicious URLs, but they fail to detect new or zero-day attacks. Machine learning models improve detection but require datasets, training, and computational power.
-
-<br><br>
-<b>References:</b><br>
-Google Safe Browsing — https://developers.google.com/safe-browsing<br>
-PhishTank — https://phishtank.org<br>
-IEEE — https://ieeexplore.ieee.org
-</p>
-</div>
-
-<!-- RESEARCH GAP -->
-<div class="glass">
-<h2>Research Gap</h2>
-<p style="color:#94a3b8;line-height:1.7">
-Most existing phishing detection systems rely on blacklist databases or machine learning models. While blacklist-based approaches fail to detect newly generated phishing websites, machine learning methods require large datasets and training time. Additionally, many ML-based systems lack interpretability, making it difficult to understand why a URL is malicious. This project addresses these limitations by introducing a lightweight rule-based system that works in real time without requiring training data. It provides faster results and clear reasoning behind each classification.
-</p>
-</div>
-
-<!-- METHODOLOGY -->
-<div class="glass">
-<h2>System Methodology</h2>
-
-<div class="row">
-
-<div class="glass" style="flex:1">
-<h3>Input</h3>
-<p>User enters URL → system analyzes instantly.</p>
-</div>
-
-<div class="glass" style="flex:1">
-<h3>Architecture</h3>
-<p style="color:#94a3b8;line-height:1.6">
-<b>1. URL Parsing:</b> Extract domain, protocol, and structure.<br><br>
-
-<b>2. Feature Extraction:</b><br>
-• URL length<br>
-• Number of dots<br>
-• Special characters (@, -, _)<br>
-• HTTPS usage<br>
-• Suspicious keywords<br><br>
-
-<b>3. Scoring Mechanism:</b> Assign weights to each feature and calculate total risk score.<br><br>
-
-<b>4. Classification:</b>  
-Safe / Suspicious / Phishing based on score.
-</p>
-</div>
-
-<div class="glass" style="flex:1">
-<h3>Live Demo</h3>
-<a href="https://srishtikab.github.io/Webshield-pbl/" target="_blank" style="color:#22c55e;font-weight:bold">
-Open Web App
-</a>
-</div>
-
-</div>
-</div>
-
-<!-- RULES + SCORING -->
-<div class="row">
-
-<div class="glass" style="flex:1">
-<h2>Rules Used</h2>
-<ul style="color:#94a3b8">
-<li>IP Address → suspicious if used</li>
-<li>@ Symbol → misleading</li>
-<li>Punycode → encoded domains</li>
-<li>Suspicious TLD → .xyz, .tk</li>
-<li>Keywords → login, verify</li>
-<li>Too many dots → fake structure</li>
-<li>Long URL → hides intent</li>
-<li>Hyphen → fake domain</li>
-<li>No HTTPS → insecure</li>
-</ul>
-</div>
-
-<div class="glass" style="flex:1">
-<h2>Scoring System</h2>
-<ul style="color:#94a3b8">
-<li>IP Address → +25</li>
-<li>@ Symbol → +25</li>
-<li>Punycode → +25</li>
-<li>TLD → +15</li>
-<li>Keywords → +10</li>
-<li>Dots → +8</li>
-<li>Length → +8</li>
-<li>Hyphen → +8</li>
-<li>No HTTPS → +10</li>
-</ul>
-<p style="color:#94a3b8">
-Safe: 0–29 | Suspicious: 30–59 | Phishing: 60+
-</p>
-</div>
-
-</div>
-
-<!-- RESULTS -->
-<div class="glass">
-<h2>Results & Analysis</h2>
-
-<div class="row">
-
-<canvas id="chart" style="max-width:200px"></canvas>
-
-<div>
-<h3>Accuracy</h3>
-<h1 style="color:#3b82f6">90%</h1>
-
-<p style="color:#94a3b8">
-Tested on 200 URLs:
-<br>70 Real  
-<br>50 Fake  
-<br>80 Suspicious  
-
-<br><br>
-
-Color Coding:
-<br><span style="color:#22c55e">Green → Safe</span>
-<br><span style="color:#ef4444">Red → Phishing</span>
-<br><span style="color:#eab308">Yellow → Suspicious</span>
-</p>
-</div>
-
-</div>
-</div>
-
-<!-- FUTURE -->
-<div class="glass">
-<h2>Future Scope</h2>
-<ul style="color:#94a3b8">
-<li>Telegram bot integration</li>
-<li>WhatsApp phishing detection bot</li>
-<li>Browser extension</li>
-</ul>
-</div>
-
-<!-- ACADEMIC CREDITS -->
-<div class="glass center">
-<h2>Academic Credits</h2>
-
-<p><b>Project Guide:</b> Dr. Aditya Sinha</p>
-<p><b>Student:</b> Srishtika Bhatnagar</p>
-<p><b>Reg No:</b> 2427030410</p>
-
-<br>
-
-<p style="color:#94a3b8">
-Manipal University Jaipur<br>
-Department of Computer Science & Engineering • 2026
-</p>
-
-</div>
-
-</div>
+<div id="resultCard" class="card"></div>
 
 <script>
-let s=0;
-function startTimer(){
-setInterval(()=>{
-s++;
-let m=Math.floor(s/60);
-let sec=s%60;
-document.getElementById("time").innerText=
-`${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
-},1000);
+
+function checkURL() {
+    let url = document.getElementById("urlInput").value;
+    let loader = document.getElementById("loader");
+    let card = document.getElementById("resultCard");
+
+    loader.style.display = "block";
+    card.style.display = "none";
+
+    fetch("https://webshield-pbl.onrender.com/check")
+    .then(() => {}) // just to wake server if sleeping
+
+    fetch("https://webshield-pbl.onrender.com/check", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({url: url})
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        loader.style.display = "none";
+
+        let className = "";
+        let badgeColor = "";
+
+        if (data.result === "Fake") {
+            className = "card fake";
+            badgeColor = "red";
+        } else if (data.result === "Suspicious") {
+            className = "card suspicious";
+            badgeColor = "yellow";
+        } else {
+            className = "card safe";
+            badgeColor = "green";
+        }
+
+        card.className = className;
+        card.style.display = "block";
+
+        card.innerHTML = `
+            <div class="badge ${badgeColor}">${data.result}</div>
+
+            <h2>Score: ${data.score} | Risk: ${data.risk}%</h2>
+
+            <p><b>URL:</b> ${data.url}</p>
+            <p><b>Domain:</b> ${data.domain}</p>
+            <p><b>Length:</b> ${data.length}</p>
+            <p><b>Dots:</b> ${data.dots}</p>
+            <p><b>Hyphens:</b> ${data.hyphens}</p>
+            <p><b>HTTPS:</b> ${data.https}</p>
+
+            <h3>Reasons:</h3>
+            <ul>
+                ${data.reasons.map(r => `<li>${r}</li>`).join("")}
+            </ul>
+        `;
+    })
+    .catch(err => {
+        loader.style.display = "none";
+        alert("Error connecting to backend");
+    });
 }
 
-new Chart(document.getElementById("chart"),{
-type:"bar",
-data:{
-labels:["Real","Fake","Suspicious"],
-datasets:[{
-data:[70,50,80],
-backgroundColor:["#22c55e","#ef4444","#eab308"]
-}]
-},
-options:{plugins:{legend:{display:false}}}
-});
 </script>
 
 </body>
