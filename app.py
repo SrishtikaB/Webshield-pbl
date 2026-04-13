@@ -6,9 +6,7 @@ from urllib.parse import urlparse
 app = Flask(__name__)
 CORS(app)
 
-# -------------------------------
-# CONSTANTS
-# -------------------------------
+
 
 KNOWN_BRANDS = [
     "google","facebook","amazon","paypal","microsoft",
@@ -25,9 +23,7 @@ SUSPICIOUS_TLDS = [
     ".xyz",".top",".gq",".tk",".ml"
 ]
 
-# -------------------------------
-# MAIN FUNCTION
-# -------------------------------
+
 
 def analyze_url(url):
     score = 0
@@ -38,14 +34,14 @@ def analyze_url(url):
 
     domain = parsed.netloc if parsed.netloc else parsed.path
 
-    # ---------------- FEATURES ----------------
+    
     length = len(url)
     dots = url.count(".")
     hyphens = domain.count("-")
     has_https = url.startswith("https")
     has_ip = bool(re.search(r"\d{1,3}(\.\d{1,3}){3}", url))
 
-    # ---------------- RULES ----------------
+    
 
     # 1. IP Address
     if has_ip:
@@ -100,8 +96,8 @@ def analyze_url(url):
     if not has_https:
         score += 10
         reasons.append("Not using HTTPS")
-
-    # ---------------- RESULT ----------------
+  
+  
 
     if score >= 60:
         verdict = "Fake"
@@ -113,7 +109,7 @@ def analyze_url(url):
     # Risk percentage
     risk = min(score, 100)
 
-    # ---------------- RETURN ----------------
+    
 
     return {
         "url": url,
@@ -128,9 +124,7 @@ def analyze_url(url):
         "reasons": reasons
     }
 
-# -------------------------------
-# API ROUTE
-# -------------------------------
+
 
 @app.route("/check", methods=["POST"])
 def check():
@@ -144,9 +138,6 @@ def check():
 
     return jsonify(result)
 
-# -------------------------------
-# RUN SERVER
-# -------------------------------
 
 if __name__ == "__main__":
     app.run()
