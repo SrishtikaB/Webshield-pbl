@@ -1,43 +1,62 @@
-# WebShield – Rule-Based URL Link Checker
+# 🛡️ WebShield – Rule-Based URL Phishing Detection System
 
-1. Project Description:
-WebShield is a rule-based phishing detection system that analyzes URLs using predefined security rules. It assigns a score based on suspicious features and classifies links as Safe, Suspicious, or Phishing.
+### 1. Project Description
+WebShield is a rule-based phishing detection system that analyzes URLs using predefined cybersecurity rules. It evaluates suspicious characteristics, assigns a risk score, and classifies URLs as **Safe**, **Suspicious**, or **Fake (Phishing)**.
 
+### 2. Problem Statement
+Phishing attacks exploit deceptive URLs to steal sensitive information. Identifying malicious links is difficult for everyday users. WebShield provides a lightweight and explainable solution by detecting phishing indicators directly from a URL before the user visits the website.
 
-2.Problem Statement:
-Many users fall victim to phishing and malicious links. It is difficult for common users to identify unsafe URLs. This project aims to check the safety of a URL using predefined rules.
+### 3. Detection Rules
+WebShield analyzes URLs based on multiple security indicators, including:
 
-3.Detection Rules:
-IP address in URL
-Presence of @ symbol
-Suspicious keywords (login, verify, secure, etc.)
-Brand impersonation patterns
-Suspicious domain extensions
-Long or complex domain names
-Multiple subdomains
-Hyphen abuse
-Punycode (homograph attacks)
+- IP Address in URL
+- Presence of **@** symbol
+- Punycode (Homograph attacks)
+- Suspicious keywords (login, verify, secure, password, etc.)
+- Brand impersonation
+- Suspicious domain extensions
+- Long domain names
+- Multiple subdomains
+- Hyphen abuse
+- Missing HTTPS
 
- How It Works:
-1. User enters a URL  
-2. System extracts features (length, symbols, keywords, etc.)  
-3. Each feature is assigned a score  
-4. Total score determines classification:  
-   0–29 → Safe
-   30–59 → Suspicious  
-   60+ → Phishing
+### 4. Workflow
 
-Technologies Used:
-Frontend: HTML, CSS, JavaScript  
-Backend: Python (Flask)  
-Deployment: Render, GitHub Pages  
+1. User enters a URL.
+2. System extracts URL features.
+3. Security rules are evaluated.
+4. Risk score is calculated.
+5. URL is classified as:
+   - **0–29** → ✅ Safe
+   - **30–59** → ⚠️ Suspicious
+   - **60+** → 🚨 Fake (Phishing)
 
- Live Demo:
- first open this link in browser: https://webshield-pbl.onrender.com 
- and then open this link: https://srishtikab.github.io/Webshield-pbl/
+### 5. Technologies Used
 
- Webpage link: https://visionary-praline-f6d71c.netlify.app
+**Frontend**
+- HTML5
+- CSS3
+- JavaScript
 
+**Backend**
+- Python
+- Flask
+- Flask-CORS
 
+**Deployment**
+- Render
 
+### 6. Live Demo
 
+🔗 **https://webshield-pbl.onrender.com**
+
+Simply enter a URL and click **Analyze URL** to receive its security assessment.
+
+### 7. Future Enhancements
+
+- WHOIS Domain Lookup
+- SSL Certificate Verification
+- Browser Extension
+- QR Code URL Scanning
+- Threat Intelligence Integration
+- Machine Learning-based Detection
