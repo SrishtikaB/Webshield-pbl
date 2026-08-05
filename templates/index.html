@@ -128,10 +128,10 @@ function checkURL() {
     loader.style.display = "block";
     card.style.display = "none";
 
-    fetch("https://webshield-pbl.onrender.com/check")
-    .then(() => {}) // just to wake server if sleeping
+    fetch("/check")
+.then(() => {})
 
-    fetch("https://webshield-pbl.onrender.com/check", {
+   fetch("/check", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({url: url})
