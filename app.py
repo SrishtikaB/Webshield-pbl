@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import re
 from urllib.parse import urlparse
@@ -125,7 +125,10 @@ def analyze_url(url):
     }
 
 
-
+@app.route("/")
+def home():
+    return render_template("index.html")
+    
 @app.route("/check", methods=["POST"])
 def check():
     data = request.json
