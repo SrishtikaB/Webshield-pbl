@@ -314,12 +314,6 @@ def determine_recommendation(verdict):
     return "This URL looks safe, but always stay alert for unexpected requests for personal data."
 
 
-def determine_confidence(reasons_count, positive_count):
-    base = 55
-    signal_bonus = (reasons_count * 6) + (positive_count * 4)
-    return min(99, base + signal_bonus)
-
-
 def analyze_url(raw_url):
     ctx = build_context(raw_url)
     score = 0
@@ -353,7 +347,6 @@ def analyze_url(raw_url):
     risk = min(score, 100)
     verdict = determine_verdict(score)
     threat_level = determine_threat_level(score)
-    confidence = determine_confidence(len(reasons), len(positive_checks))
     recommendation = determine_recommendation(verdict)
 
     total_rules = len(RISK_RULES) + len(TRUST_RULES)
@@ -376,7 +369,6 @@ def analyze_url(raw_url):
         "risk": risk,
         "result": verdict,
         "threat_level": threat_level,
-        "confidence": confidence,
         "positive_checks": positive_checks,
         "reasons": reasons,
         "recommendation": recommendation,
