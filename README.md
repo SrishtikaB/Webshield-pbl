@@ -1,37 +1,42 @@
 # 🛡️ WebShield
 
-**Rule-based phishing URL detection with a real-time risk analysis dashboard.**
-
-WebShield inspects a URL against 30+ weighted security rules and returns a risk score, threat level, and confidence rating in seconds.
+**A hybrid phishing URL detector — rule-based scoring engine + Google Safe Browsing, benchmarked on a 1,000-URL real-world dataset.**
 
 🔗 **Live demo:** [webshield-pbl.onrender.com](https://webshield-pbl.onrender.com)
 
 ---
 
-## How it works
+## Overview
 
-1. User submits a URL.
-2. Flask backend parses it and runs 30 detection rules across three categories — **Structure**, **Content**, and **Domain Intel** — plus 5 trust signals (HTTPS, `.gov`/`.edu`/`.org`, clean domain structure).
-3. Weighted points produce a **risk score (0–100)** and a **confidence rating**, based on how much evidence was found.
-4. URL is classified:
+WebShield analyzes a URL through **28 weighted detection rules** and a live **Google Safe Browsing** lookup, returning a risk score, verdict, and a transparent breakdown of exactly why a link was flagged — no black box.
 
-   | Score | Verdict |
-   |---|---|
-   | 0–29 | ✅ Safe |
-   | 30–59 | ⚠️ Suspicious |
-   | 60+ | 🚨 Fake / Phishing |
-
-## What it checks
-
-IP-based URLs, missing HTTPS, `@` obfuscation, punycode/homograph attacks, suspicious keywords (`login`, `verify`, `secure`...), brand impersonation, URL shorteners, suspicious TLDs, excessive subdomains/hyphens/query params, encoded characters, entropy-based domain randomness, and more — offset by trust signals like trusted TLDs and clean domain structure.
-
-## Tech stack
-
-| | |
+| Score | Verdict |
 |---|---|
-| **Frontend** | HTML5, CSS3, JavaScript |
-| **Backend** | Python, Flask, Flask-CORS |
-| **Deployment** | Render |
+| 0–14 | ✅ Safe |
+| 15–39 | ⚠️ Suspicious |
+| 40+ | 🚨 Fake / Phishing |
+
+## Detection signals
+
+`IP-based URLs` · `Missing HTTPS` · `@ obfuscation` · `Punycode/homograph attacks` · `Suspicious keywords` · `Brand impersonation` · `URL shorteners` · `Suspicious TLDs` · `Excessive subdomains/hyphens/params` · `Encoded characters` · `Domain entropy` — offset by trust signals (`.gov`/`.edu`, clean domain structure) and a live Google threat-database cross-check.
+
+## Benchmarked accuracy
+
+Tested on 1,000 real URLs — 500 verified phishing (PhishTank) + 500 real popular sites (Chrome UX Report) — not assumed, measured.
+
+| Metric | Result |
+|---|---|
+| **Accuracy** | **74.6%** |
+| Precision | 92.4% |
+| Recall | 53.6% |
+| F1 Score | 0.679 |
+| False Positive Rate | 4.4% |
+
+Full per-rule performance breakdown: [`WebShield_28_Rules_Report`](./WebShield_28_Rules_Report.docx)
+
+## Stack
+
+`Python` · `Flask` · `Flask-CORS` · `Google Safe Browsing API v4` · `HTML/CSS/JS` · `Render`
 
 ## Run locally
 
@@ -39,6 +44,10 @@ IP-based URLs, missing HTTPS, `@` obfuscation, punycode/homograph attacks, suspi
 git clone https://github.com/<your-username>/Webshield-pbl.git
 cd Webshield-pbl
 pip install -r requirements.txt
+
+# optional — app runs fine without it, just skips the Safe Browsing check
+export GOOGLE_SAFE_BROWSING_API_KEY=your_key_here
+
 python app.py
 ```
 
@@ -46,11 +55,11 @@ Visit `http://localhost:5000`.
 
 ## Roadmap
 
-- WHOIS domain lookup
-- SSL certificate verification
-- Browser extension
-- ML-based detection
+- [ ] WHOIS domain age lookup
+- [ ] SSL certificate verification
+- [ ] Browser extension
+- [ ] ML model trained on the same dataset, benchmarked against this baseline
 
 ---
 
-<sub>Built as a cybersecurity project demonstrating explainable, rule-based phishing detection.</sub>
+<sub>Built as a cybersecurity project demonstrating explainable, evidence-validated phishing detection.</sub>
