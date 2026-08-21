@@ -1,12 +1,68 @@
 import math
+import os
 import re
 from urllib.parse import urlparse
 
+import requests
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
+
+# ---------------------------------------------------------------------
+# Google Safe Browsing API
+# ---------------------------------------------------------------------
+# Get a free key here: https://developers.google.com/safe-browsing/v4/get-started
+# Then set it as an environment variable named GOOGLE_SAFE_BROWSING_API_KEY
+# (locally in a .env / terminal export, and on Render under Environment).
+SAFE_BROWSING_API_KEY = os.environ.get("GOOGLE_SAFE_BROWSING_API_KEY", "")
+SAFE_BROWSING_ENDPOINT = "https://safebrowsing.googleapis.com/v4/threatMatches:find"
+
+
+def check_safe_browsing(raw_url):
+    """
+    Calls Google's Safe Browsing API to check if this URL is a known
+    malware/phishing/unwanted-software site. Returns (is_threat, threat_types)
+    or (False, []) if the key is missing, the request fails, or nothing is found.
+    This never crashes the app -- if the API is down, we just skip this check
+    and fall back to the rule-based score alone.
+    """
+    if not SAFE_BROWSING_API_KEY:
+        return False, []
+
+    payload = {
+        "client": {"clientId": "webshield", "clientVersion": "1.0"},
+        "threatInfo": {
+            "threatTypes": [
+                "MALWARE",
+                "SOCIAL_ENGINEERING",
+                "UNWANTED_SOFTWARE",
+                "POTENTIALLY_HARMFUL_APPLICATION",
+            ],
+            "platformTypes": ["ANY_PLATFORM"],
+            "threatEntryTypes": ["URL"],
+            "threatEntries": [{"url": raw_url}],
+        },
+    }
+
+    try:
+        resp = requests.post(
+            SAFE_BROWSING_ENDPOINT,
+            params={"key": SAFE_BROWSING_API_KEY},
+            json=payload,
+            timeout=4,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        matches = data.get("matches", [])
+        if matches:
+            threat_types = list({m.get("threatType", "THREAT") for m in matches})
+            return True, threat_types
+        return False, []
+    except requests.RequestException:
+        # API down, network issue, timeout, bad key, etc. -- fail safe, don't block the scan.
+        return False, []
 
 
 # ---------------------------------------------------------------------
@@ -338,6 +394,18 @@ def analyze_url(raw_url):
             score += points
             positive_checks.append(reason)
 
+    # --- Google Safe Browsing check (real-world threat intelligence) ---
+    is_threat, threat_types = check_safe_browsing(raw_url)
+    safe_browsing_hit = is_threat
+    if is_threat:
+        readable_types = ", ".join(t.replace("_", " ").title() for t in threat_types)
+        score += 60
+        reasons.append({
+            "text": f"Flagged by Google Safe Browsing ({readable_types})",
+            "points": 60,
+            "category": "Threat Intel",
+        })
+
     if ctx.has_https and "HTTPS Enabled" not in positive_checks:
         positive_checks.insert(0, "HTTPS Enabled")
     if ctx.hyphens == 0 and "Standard Domain Structure" not in positive_checks:
@@ -357,6 +425,7 @@ def analyze_url(raw_url):
         for c in RISK_CATEGORIES
     ]
     categories.append({"name": "Trust", "total": len(TRUST_RULES), "hits": len(positive_checks)})
+    categories.append({"name": "Threat Intel", "total": 1, "hits": 1 if safe_browsing_hit else 0})
 
     return {
         "url": ctx.url,
@@ -373,6 +442,11 @@ def analyze_url(raw_url):
         "reasons": reasons,
         "recommendation": recommendation,
         "categories": categories,
+        "safe_browsing": {
+            "checked": bool(SAFE_BROWSING_API_KEY),
+            "flagged": safe_browsing_hit,
+            "threat_types": threat_types,
+        },
         "stats": {
             "totalRules": total_rules,
             "flagsTriggered": len(reasons),
