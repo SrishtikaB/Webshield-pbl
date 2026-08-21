@@ -35,8 +35,8 @@ URL_SHORTENERS = [
 
 STANDARD_PORTS = {"80", "443"}
 
-VERDICT_THRESHOLDS = {"fake": 60, "suspicious": 30}
-THREAT_LEVEL_THRESHOLDS = {"High": 60, "Medium": 30}
+VERDICT_THRESHOLDS = {"fake": 40, "suspicious": 15}
+THREAT_LEVEL_THRESHOLDS = {"High": 40, "Medium": 15}
 
 
 # ---------------------------------------------------------------------
@@ -171,10 +171,11 @@ def rule_suspicious_words(ctx):
 
 
 def rule_brand_impersonation(ctx):
+    labels = ctx.domain.split(".")
     for brand in KNOWN_BRANDS:
-        if brand in ctx.domain:
-            for word in SUSPICIOUS_WORDS:
-                if word in ctx.url:
+        for label in labels:
+            if brand in label and label != brand:
+                if any(w in ctx.url for w in SUSPICIOUS_WORDS):
                     return (20, "Possible brand impersonation")
     return None
 
@@ -224,16 +225,12 @@ def rule_domain_starts_digit(ctx):
 
 def rule_domain_ends_digit(ctx):
     labels = ctx.domain.split(".")
-    first = labels[0] if labels else ""
-    return (5, "Domain ends with numeric value") if first and first[-1].isdigit() else None
+    main_label = labels[-2] if len(labels) >= 2 else (labels[0] if labels else "")
+    return (5, "Domain ends with numeric value") if main_label and main_label[-1].isdigit() else None
 
 
 def rule_consecutive_hyphens(ctx):
     return (6, "Consecutive hyphens detected") if "--" in ctx.domain else None
-
-
-def rule_underscore(ctx):
-    return (5, "Underscore used in domain") if "_" in ctx.domain else None
 
 
 def rule_random_domain(ctx):
@@ -249,7 +246,7 @@ RISK_RULES = [
     rule_login_path, rule_suspicious_words, rule_brand_impersonation, rule_digit_heavy,
     rule_special_chars, rule_encoded_chars, rule_double_slash_path, rule_query_params,
     rule_uncommon_port, rule_multi_keywords, rule_domain_starts_digit,
-    rule_domain_ends_digit, rule_consecutive_hyphens, rule_underscore, rule_random_domain,
+    rule_domain_ends_digit, rule_consecutive_hyphens, rule_random_domain,
 ]
 
 
@@ -261,13 +258,9 @@ def trust_edu(ctx):
     return (-10, "Trusted .edu Domain") if ctx.domain.endswith(".edu") else None
 
 
-def trust_org(ctx):
-    return (-5, "Trusted .org Domain") if ctx.domain.endswith(".org") else None
-
-
 def trust_clean_structure(ctx):
-    if ctx.hyphens == 0 and ctx.dots <= 2 and not ctx.has_ip:
-        return (-5, "Clean Domain Structure")
+    if ctx.hyphens == 0 and ctx.dots <= 2 and not ctx.has_ip and len(ctx.domain) <= 20:
+        return (-3, "Clean Domain Structure")
     return None
 
 
@@ -277,7 +270,7 @@ def trust_https_trusted_tld(ctx):
     return None
 
 
-TRUST_RULES = [trust_gov, trust_edu, trust_org, trust_clean_structure, trust_https_trusted_tld]
+TRUST_RULES = [trust_gov, trust_edu, trust_clean_structure, trust_https_trusted_tld]
 
 # rules 0-9 = Structure, 10-19 = Content, 20-24 = Domain Intel
 RISK_CATEGORIES = [
