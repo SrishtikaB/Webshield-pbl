@@ -40,7 +40,7 @@ body {
   color: var(--text-primary);
   display: flex;
   justify-content: center;
-  padding: 56px 18px 90px;
+  padding: 38px 18px 60px;
   position: relative;
   overflow-x: hidden;
 }
@@ -73,7 +73,7 @@ body::after {
 .container { width: 100%; max-width: 640px; position: relative; z-index: 1; }
 
 /* ---------------- Brand ---------------- */
-.brand { text-align: center; margin-bottom: 30px; }
+.brand { text-align: center; margin-bottom: 20px; }
 .brand-tag {
   display: inline-flex; align-items: center; gap: 8px;
   font-family: var(--mono); font-size: 11px; letter-spacing: 2px;
@@ -125,7 +125,7 @@ body::after {
 }
 .tbar-status .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 6px var(--accent); }
 
-.terminal-body { padding: 22px 20px 20px; }
+.terminal-body { padding: 18px 18px 16px; }
 .prompt-row {
   display: flex; align-items: center; gap: 10px;
   font-family: var(--mono); font-size: 13px; color: var(--text-dim);
@@ -179,7 +179,7 @@ body::after {
   background: linear-gradient(180deg, var(--panel-2), var(--panel));
   border: 1px solid var(--panel-border);
   border-left: 3px solid var(--safe);
-  border-radius: 12px; padding: 26px 24px;
+  border-radius: 12px; padding: 20px 20px;
   box-shadow: 0 30px 60px -34px rgba(0,0,0,0.75);
 }
 .result-card.risk-fake { border-left-color: var(--fake); }
@@ -212,6 +212,7 @@ body::after {
 
 .gauge-wrap { position: relative; width: 168px; height: 108px; margin-left: auto; }
 .gauge-wrap svg { width: 100%; height: 100%; overflow: visible; display: block; }
+#needleGroup { transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1); }
 .gauge-readout {
   position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
   text-align: center; font-family: var(--mono); pointer-events: none;
@@ -219,28 +220,34 @@ body::after {
 .gauge-readout .value { display: block; font-size: 22px; font-weight: 800; letter-spacing: 1px; text-shadow: 0 0 12px currentColor; }
 .gauge-readout .glabel { display: block; font-size: 9px; color: var(--text-dim); letter-spacing: 3px; text-transform: uppercase; margin-top: 1px; }
 
-.stat-grid { display: grid; grid-template-columns: 1fr; text-align: center; margin: 14px 0 4px; }
-.stat-label { display: block; color: var(--text-dim); font-size: 10.5px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1.5px; font-family: var(--mono); }
-.stat-value { display: block; font-size: 19px; font-weight: 700; font-family: var(--mono); color: var(--accent-cyan); }
+.divider { height: 1px; background: linear-gradient(90deg, transparent, var(--panel-border) 15%, var(--panel-border) 85%, transparent); margin: 14px 0; }
 
-.divider { height: 1px; background: linear-gradient(90deg, transparent, var(--panel-border) 15%, var(--panel-border) 85%, transparent); margin: 18px 0; }
-
-.detail-list { font-family: var(--mono); font-size: 12.5px; }
-.detail-list p {
-  margin: 0; padding: 6px 0; color: var(--text-muted);
+.detail-list { font-family: var(--mono); font-size: 12px; display: flex; flex-direction: column; gap: 5px; }
+.detail-row {
+  padding: 5px 0; color: var(--text-muted);
   display: flex; justify-content: space-between; gap: 12px;
   border-bottom: 1px dashed var(--panel-border-soft);
 }
-.detail-list p:last-child { border-bottom: none; }
-.detail-label { color: var(--text-dim); letter-spacing: 0.5px; }
-.detail-list p span:last-child { color: var(--text-primary); text-align: right; word-break: break-all; }
+.detail-label { color: var(--text-dim); letter-spacing: 0.5px; flex-shrink: 0; }
+.detail-row span:last-child { color: var(--text-primary); text-align: right; word-break: break-all; }
+.detail-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-top: 6px; }
+.detail-cell {
+  background: #060a09; border: 1px solid var(--panel-border-soft); border-radius: 7px;
+  padding: 7px 6px; text-align: center; display: flex; flex-direction: column; gap: 3px;
+}
+.detail-cell .detail-label { font-size: 8.5px; letter-spacing: 1px; text-transform: uppercase; }
+.detail-cell span:last-child { color: var(--text-primary); font-weight: 700; font-size: 12px; text-align: center; }
 
 .section h3 {
-  margin: 0 0 12px; font-size: 11px; text-align: left; letter-spacing: 2px;
+  margin: 0 0 10px; font-size: 11px; text-align: left; letter-spacing: 2px;
   font-family: var(--mono); text-transform: uppercase; color: var(--text-dim);
 }
 .section h3::before { content: "// "; color: var(--accent); }
-.reasons-list, .positive-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; font-family: var(--mono); font-size: 13px; }
+.reasons-list, .positive-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; font-family: var(--mono); font-size: 12.5px; }
+.findings-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+@media (min-width: 460px) {
+  .findings-grid { grid-template-columns: 1fr 1fr; }
+}
 .reasons-list li.no-flags-row::before { content: none; }
 .reason-row { display: flex; flex-direction: column; gap: 5px; }
 .reason-top { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; }
@@ -257,18 +264,8 @@ body::after {
 .positive-list li { color: var(--safe); }
 .positive-list li::before { content: "✔ "; }
 
-/* ---------------- Visual Analytics ---------------- */
-.analytics-grid { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; margin-bottom: 18px; }
-.donut-wrap { position: relative; width: 108px; height: 108px; flex-shrink: 0; }
-.donut-wrap svg { width: 100%; height: 100%; }
-.donut-readout {
-  position: absolute; inset: 0; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; font-family: var(--mono); pointer-events: none;
-}
-.donut-readout .dv { font-size: 19px; font-weight: 800; color: var(--accent-cyan); text-shadow: 0 0 10px currentColor; }
-.donut-readout .dl { font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-top: 2px; }
-
-.category-breakdown { flex: 1; min-width: 190px; display: flex; flex-direction: column; gap: 11px; }
+/* ---------------- Rule Breakdown ---------------- */
+.category-breakdown { display: flex; flex-direction: column; gap: 9px; margin-bottom: 14px; }
 .cat-row { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; }
 .cat-label { width: 82px; color: var(--text-muted); flex-shrink: 0; }
 .cat-track { flex: 1; height: 6px; border-radius: 4px; background: #0e1613; overflow: hidden; }
@@ -279,10 +276,10 @@ body::after {
 .cat-fill.trust { background: linear-gradient(90deg, #0a3d2c, #00ff9d); }
 .cat-count { width: 40px; text-align: right; color: var(--text-dim); flex-shrink: 0; }
 
-.stat-cards-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.stat-cards-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .mini-card {
   background: #060a09; border: 1px solid var(--panel-border-soft); border-radius: 8px;
-  padding: 12px 8px; text-align: center;
+  padding: 9px 8px; text-align: center;
 }
 .mini-value { display: block; font-family: var(--mono); font-size: 17px; font-weight: 800; color: var(--text-primary); }
 .mini-value-sm { font-size: 11px; font-weight: 600; line-height: 1.3; word-break: break-word; }
@@ -399,31 +396,20 @@ body::after {
           </div>
         </div>
       </div>
-      <div class="stat-grid">
-        <div class="stat"><span class="stat-label">Confidence</span><span id="confidence" class="stat-value">—</span></div>
-      </div>
-      <div class="divider"></div>
       <div class="detail-list">
-        <p><span class="detail-label">url</span> <span id="detailUrl"></span></p>
-        <p><span class="detail-label">domain</span> <span id="detailDomain"></span></p>
-        <p><span class="detail-label">length</span> <span id="detailLength"></span></p>
-        <p><span class="detail-label">dots</span> <span id="detailDots"></span></p>
-        <p><span class="detail-label">hyphens</span> <span id="detailHyphens"></span></p>
-        <p><span class="detail-label">https</span> <span id="detailHttps"></span></p>
+        <div class="detail-row"><span class="detail-label">url</span><span id="detailUrl"></span></div>
+        <div class="detail-row"><span class="detail-label">domain</span><span id="detailDomain"></span></div>
+        <div class="detail-grid">
+          <div class="detail-cell"><span class="detail-label">length</span><span id="detailLength"></span></div>
+          <div class="detail-cell"><span class="detail-label">dots</span><span id="detailDots"></span></div>
+          <div class="detail-cell"><span class="detail-label">hyphens</span><span id="detailHyphens"></span></div>
+          <div class="detail-cell"><span class="detail-label">https</span><span id="detailHttps"></span></div>
+        </div>
       </div>
       <div class="divider"></div>
       <div class="section analytics-section">
-        <h3>Visual Analytics</h3>
-        <div class="analytics-grid">
-          <div class="donut-wrap">
-            <svg id="confidenceDonut" viewBox="0 0 120 120"></svg>
-            <div class="donut-readout">
-              <span id="confidenceDonutValue" class="dv">—</span>
-              <span class="dl">Confidence</span>
-            </div>
-          </div>
-          <div id="categoryBreakdown" class="category-breakdown"></div>
-        </div>
+        <h3>Rule Breakdown</h3>
+        <div id="categoryBreakdown" class="category-breakdown"></div>
         <div class="stat-cards-row">
           <div class="mini-card"><span id="statChecked" class="mini-value">—</span><span class="mini-label">Rules Checked</span></div>
           <div class="mini-card"><span id="statTriggered" class="mini-value">—</span><span class="mini-label">Flags Triggered</span></div>
@@ -432,9 +418,10 @@ body::after {
         </div>
       </div>
       <div class="divider"></div>
-      <div class="section"><h3>Threat Analysis</h3><ul id="reasonsList" class="reasons-list"></ul></div>
-      <div class="divider"></div>
-      <div class="section"><h3>Positive Checks</h3><ul id="positiveList" class="positive-list"></ul></div>
+      <div class="findings-grid">
+        <div class="section"><h3>Threat Analysis</h3><ul id="reasonsList" class="reasons-list"></ul></div>
+        <div class="section"><h3>Positive Checks</h3><ul id="positiveList" class="positive-list"></ul></div>
+      </div>
       <div class="divider"></div>
       <div class="section recommendation"><h3>Recommendation</h3><p id="recommendationText"></p></div>
     </div>
@@ -616,6 +603,7 @@ function gaugeColorForVerdict(verdict) {
   return "#00ff9d";
 }
 
+let gaugeCurrentRisk = 0;
 function updateGauge(risk, verdict) {
   const rotation = (risk / 100) * 180 - 90;
   const needleGroup = document.getElementById("needleGroup");
@@ -623,57 +611,25 @@ function updateGauge(risk, verdict) {
   const color = gaugeColorForVerdict(verdict);
   document.getElementById("needlePoly").setAttribute("fill", color);
   const scoreEl = document.getElementById("riskScore");
-  scoreEl.textContent = `${risk}%`;
   scoreEl.style.color = color;
+
+  const from = gaugeCurrentRisk;
+  const to = risk;
+  gaugeCurrentRisk = risk;
+  if (REDUCED_MOTION) { scoreEl.textContent = `${to}%`; return; }
+  const duration = 850;
+  const start = performance.now();
+  function tick(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const value = Math.round(from + (to - from) * eased);
+    scoreEl.textContent = `${value}%`;
+    if (t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 }
 
 buildGauge();
-
-// ---------------------------------------------------------------------
-// Circular confidence donut chart
-// ---------------------------------------------------------------------
-const DONUT_R = 50;
-const DONUT_CIRC = 2 * Math.PI * DONUT_R;
-
-function buildConfidenceDonut() {
-  const svg = document.getElementById("confidenceDonut");
-  svg.innerHTML = "";
-  svg.setAttribute("viewBox", "0 0 120 120");
-
-  const defs = svgEl("defs", {});
-  const filter = svgEl("filter", { id: "donutGlow", x: "-50%", y: "-50%", width: "200%", height: "200%" });
-  filter.appendChild(svgEl("feGaussianBlur", { stdDeviation: "2.2", result: "blur" }));
-  const merge = svgEl("feMerge", {});
-  merge.appendChild(svgEl("feMergeNode", { in: "blur" }));
-  merge.appendChild(svgEl("feMergeNode", { in: "SourceGraphic" }));
-  filter.appendChild(merge);
-  defs.appendChild(filter);
-  svg.appendChild(defs);
-
-  svg.appendChild(svgEl("circle", {
-    cx: "60", cy: "60", r: DONUT_R, fill: "none", stroke: "#152420", "stroke-width": "9",
-  }));
-  const progress = svgEl("circle", {
-    id: "donutProgress", cx: "60", cy: "60", r: DONUT_R, fill: "none",
-    stroke: "#23d0ff", "stroke-width": "9", "stroke-linecap": "round",
-    "stroke-dasharray": DONUT_CIRC, "stroke-dashoffset": DONUT_CIRC,
-    transform: "rotate(-90 60 60)", filter: "url(#donutGlow)",
-    style: "transition: stroke-dashoffset 0.7s cubic-bezier(.2,.8,.2,1), stroke 0.3s ease",
-  });
-  svg.appendChild(progress);
-}
-
-function updateConfidenceDonut(confidence, verdict) {
-  const progress = document.getElementById("donutProgress");
-  const offset = DONUT_CIRC * (1 - confidence / 100);
-  const color = gaugeColorForVerdict(verdict);
-  progress.style.stroke = color;
-  progress.setAttribute("stroke-dashoffset", offset);
-  const valueEl = document.getElementById("confidenceDonutValue");
-  valueEl.textContent = `${confidence}%`;
-  valueEl.style.color = color;
-}
-buildConfidenceDonut();
 
 // ---------------------------------------------------------------------
 // UI wiring
@@ -687,7 +643,6 @@ const invalidInputEcho = document.getElementById("invalidInputEcho");
 const scanLog = document.getElementById("scanLog");
 const verdictBadge = document.getElementById("verdictBadge");
 const threatLevelEl = document.getElementById("threatLevel");
-const confidenceEl = document.getElementById("confidence");
 const detailUrl = document.getElementById("detailUrl");
 const detailDomain = document.getElementById("detailDomain");
 const detailLength = document.getElementById("detailLength");
@@ -780,9 +735,7 @@ function renderResult(data) {
   verdictBadge.textContent = VERDICT_ICON[data.result] || data.result;
   verdictBadge.className = `badge ${cls}`;
   threatLevelEl.textContent = data.threat_level;
-  confidenceEl.textContent = `${data.confidence}%`;
   updateGauge(data.risk, data.result);
-  updateConfidenceDonut(data.confidence, data.result);
   detailUrl.textContent = data.url;
   detailDomain.textContent = data.domain;
   detailLength.textContent = data.length;
