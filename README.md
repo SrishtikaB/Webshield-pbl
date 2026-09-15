@@ -1,6 +1,7 @@
 # 🛡️ WebShield
 
-**A hybrid phishing URL detector — rule-based scoring engine + Google Safe Browsing, benchmarked on a 20,000-URL real-world dataset.**
+**A hybrid phishing URL detector — rule-based scoring engine + Google Safe Browsing, benchmarked on a 20,000-URL real-world dataset.**WebShield** turns suspicious links into clear security insights—analyzing URLs, scoring their risk, and revealing **exactly what makes them dangerous**, with rule-based detection and optional Google Safe Browsing intelligence.
+**
 
 🔗 **Live demo:** [webshield-pbl.onrender.com](https://webshield-pbl.onrender.com)
 
