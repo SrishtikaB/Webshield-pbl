@@ -1,6 +1,6 @@
 # 🛡️ WebShield
 
-**A hybrid phishing URL detector — rule-based scoring engine + Google Safe Browsing, benchmarked on a 1,000-URL real-world dataset.**
+**A hybrid phishing URL detector — rule-based scoring engine + Google Safe Browsing, benchmarked on a 20,000-URL real-world dataset.**
 
 🔗 **Live demo:** [webshield-pbl.onrender.com](https://webshield-pbl.onrender.com)
 
@@ -22,7 +22,7 @@ WebShield analyzes a URL through **28 weighted detection rules** and a live **Go
 
 ## Benchmarked accuracy
 
-Tested on 1,000 real URLs — 500 verified phishing (PhishTank) + 500 real popular sites (Chrome UX Report) — not assumed, measured.
+Tested on 20,000 real URLs — 10,000 verified phishing (PhishTank) + 10,000 real popular sites (Chrome UX Report) — not assumed, measured.
 
 | Metric | Result |
 |---|---|
@@ -53,12 +53,6 @@ python app.py
 
 Visit `http://localhost:5000`.
 
-## Roadmap
-
-- [ ] WHOIS domain age lookup
-- [ ] SSL certificate verification
-- [ ] Browser extension
-- [ ] ML model trained on the same dataset, benchmarked against this baseline
 
 ---
 
