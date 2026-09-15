@@ -12,9 +12,9 @@ WebShield analyzes a URL through **28 weighted detection rules** and a live **Go
 
 | Score | Verdict |
 |---|---|
-| 0–14 | ✅ Safe |
-| 15–39 | ⚠️ Suspicious |
-| 40+ | 🚨 Fake / Phishing |
+| 0–14 |  Safe |
+| 15–39 |  Suspicious |
+| 40+ |  Fake / Phishing |
 
 ## Detection signals
 
