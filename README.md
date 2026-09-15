@@ -32,7 +32,7 @@ Tested on 1,000 real URLs — 500 verified phishing (PhishTank) + 500 real popul
 | F1 Score | 0.679 |
 | False Positive Rate | 4.4% |
 
-Full per-rule performance breakdown: [`WebShield_28_Rules_Report`](./WebShield_28_Rules_Report.docx)
+
 
 ## Stack
 
