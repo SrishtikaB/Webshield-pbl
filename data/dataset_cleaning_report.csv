@@ -1,0 +1,14 @@
+Step,Metric,Value,Description
+Step 1,Raw URLs Loaded,64307,Total raw rows read from input CSV
+Step 2,Missing URLs Removed,0,Rows removed due to null or empty URL field
+Step 3,Missing/Unknown Labels Removed,0,Rows removed due to missing or unrecognized label
+Step 4,Exact Duplicates Removed,0,Rows removed as identical URL strings
+Step 5,Normalized Duplicates Removed,1,Rows removed as duplicates after safe normalization
+Step 6,Total Duplicates Removed,1,Sum of exact and normalized duplicates removed
+Step 7,Invalid/Malformed URLs Removed,0,Rows removed due to unparseable structure or missing host
+Step 8,Total Rows Dropped,1,"Total invalid, missing, or duplicate rows removed"
+Step 9,Final Clean URLs,64306,"Total clean, validated URLs in output dataset"
+Step 10,Legitimate URLs,32239,Count of verified legitimate URLs
+Step 11,Phishing URLs,32067,Count of verified phishing URLs
+Step 12,Legitimate Ratio (%),50.13%,Percentage of legitimate URLs in clean dataset
+Step 13,Phishing Ratio (%),49.87%,Percentage of phishing URLs in clean dataset
