@@ -321,13 +321,17 @@ def rule_login_path(ctx):
 
 
 def rule_suspicious_words(ctx):
-    # Inspect the hostname and path, not query values such as search terms.
-    # A legitimate search for "phishing" should not trigger this rule by itself.
     hostname = (ctx.domain or "").lower()
     path = (ctx.parsed.path if ctx.parsed else "").lower()
     relevant_text = f"{hostname} {path}"
-    if any(w in relevant_text for w in SUSPICIOUS_WORDS):
-        return (10, "Phishing-related keywords detected in domain or path")
+
+    count = sum(1 for w in SUSPICIOUS_WORDS if w in relevant_text)
+
+    # Single keyword gets 10 points.
+    # Multiple keywords are handled by rule_multi_keywords().
+    if count == 1:
+        return (10, "Phishing-related keyword detected in domain or path")
+
     return None
 
 
@@ -573,61 +577,53 @@ def analyze_url(raw_url):
         r["text"] not in QUERY_OR_LENGTH_REASONS for r in reasons
     )
 
+    
     if safe_browsing_hit:
-        # Definitive external threat intelligence confirming active malware/phishing
         hybrid_risk = max(score, 60)
+
     elif verdict == "Fake":
-        # Substantive rule-based evidence (score >= 40)
         if ml_prediction == "phishing" and p_phish is not None:
-            hybrid_risk = min(100, max(rule_risk, int(round(rule_risk * 0.7 + p_phish * 100 * 0.3))))
+            hybrid_risk = min(100, max(
+                rule_risk,
+                int(round(rule_risk * 0.7 + p_phish * 100 * 0.3))
+            ))
         else:
             hybrid_risk = rule_risk
+
     elif verdict == "Suspicious":
-        if has_strong_rule:
-            # High-confidence attack indicator (e.g. brand impersonation or IP address)
-            if ml_prediction == "phishing" and p_phish is not None:
-                if rule_risk >= 30 and p_phish >= 0.8:
-                    hybrid_risk = min(100, max(40, int(round(rule_risk * 0.6 + p_phish * 100 * 0.4))))
-                else:
-                    hybrid_risk = min(39, max(rule_risk, int(round(rule_risk * 0.7 + p_phish * 100 * 0.3))))
-            else:
-                hybrid_risk = rule_risk
+        if ml_prediction == "phishing" and p_phish is not None:
+            hybrid_risk = min(39, max(
+                rule_risk,
+                int(round(rule_risk * 0.7 + p_phish * 100 * 0.3))
+            ))
         else:
-            if ml_prediction == "phishing":
-                p_val = p_phish if p_phish is not None else 0.5
-                hybrid_risk = min(39, max(rule_risk, int(round(rule_risk * 0.7 + p_val * 100 * 0.3))))
-            else:
-                if is_trusted_domain and not has_substantive_threat:
-                    hybrid_risk = min(rule_risk, 14)
-                else:
-                    hybrid_risk = rule_risk
-    else:  # verdict == "Safe" (score < 15)
+            hybrid_risk = min(39, rule_risk)
+
+    else:  # Safe verdict
         if ml_prediction == "phishing" and (p_phish is None or p_phish > 0.5):
-            # ML predicts phishing, but rule detector finds low/zero threat
             if is_trusted_domain:
-                # On trusted brand/institutional domains, query parameters and lengths
-                # do not create false positives unless substantive threats exist in path/content
                 if not has_substantive_threat:
                     hybrid_risk = min(rule_risk, 14)
                 else:
                     if p_phish is not None:
-                        hybrid_risk = max(15, min(35, int(round(15 + p_phish * 15 + rule_risk * 0.5))))
+                        hybrid_risk = max(15, min(
+                            35, int(round(15 + p_phish * 15 + rule_risk * 0.5))
+                        ))
                     else:
                         hybrid_risk = max(15, min(30, 15 + rule_risk))
             else:
-                # On unknown/unvetted domains
                 if len(reasons) == 0:
-                    # Clean domain with zero threat indicators; ML path_length artifact
                     hybrid_risk = rule_risk
                 else:
-                    # Specific threat indicator present on unvetted domain; cautious verdict
                     if p_phish is not None:
-                        hybrid_risk = max(15, min(35, int(round(15 + p_phish * 15 + rule_risk * 0.5))))
+                        hybrid_risk = max(15, min(
+                            35, int(round(15 + p_phish * 15 + rule_risk * 0.5))
+                        ))
                     else:
                         hybrid_risk = max(15, min(30, 15 + rule_risk))
         else:
-            # Rule and ML agree on Safe/legitimate (or ML unavailable)
             hybrid_risk = rule_risk
+
 
     hybrid_risk = max(0, min(100, hybrid_risk))
     hybrid_verdict = determine_verdict(hybrid_risk)
@@ -655,7 +651,7 @@ def analyze_url(raw_url):
         # Existing frontend fields follow the hybrid verdict so the badge,
         # gauge, and threat level do not contradict one another.
         "risk": hybrid_risk,
-        "result": verdict,
+        "result": hybrid_verdict,
         "ml_prediction": ml_result,
         "hybrid_verdict": hybrid_verdict,
         "hybrid_recommendation": hybrid_recommendation,
