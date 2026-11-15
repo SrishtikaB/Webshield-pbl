@@ -1,0 +1,5 @@
+# Optional ML extras — not required for the Flask rule-based detector.
+# Install only after you add a real labelled CSV (url,label):
+#   pip install -r ml/requirements.txt
+scikit-learn
+joblib
