@@ -1,0 +1,70 @@
+{
+  "feature_names": [
+    "url_length",
+    "hostname_length",
+    "path_length",
+    "num_dots",
+    "num_digits",
+    "num_hyphens",
+    "num_subdomains",
+    "https",
+    "ip_hostname",
+    "has_at",
+    "query_param_count",
+    "punycode",
+    "suspicious_keyword_count",
+    "hostname_entropy"
+  ],
+  "selected_model": "random_forest",
+  "label_mapping": {
+    "0": "legitimate",
+    "1": "phishing"
+  },
+  "metrics": {
+    "accuracy": 0.9933908716274007,
+    "precision": 0.9963915908377785,
+    "recall": 0.9903321378450023,
+    "f1": 0.9933526237585047,
+    "false_positive_rate": 0.0035669975186104217,
+    "confusion_matrix": {
+      "tn": 6425,
+      "fp": 23,
+      "fn": 62,
+      "tp": 6351
+    }
+  },
+  "all_model_metrics": {
+    "logreg": {
+      "accuracy": 0.9830495295855688,
+      "precision": 0.9928400954653938,
+      "recall": 0.9730235459223452,
+      "f1": 0.9828319420381161,
+      "false_positive_rate": 0.006978908188585608,
+      "confusion_matrix": {
+        "tn": 6403,
+        "fp": 45,
+        "fn": 173,
+        "tp": 6240
+      }
+    },
+    "random_forest": {
+      "accuracy": 0.9933908716274007,
+      "precision": 0.9963915908377785,
+      "recall": 0.9903321378450023,
+      "f1": 0.9933526237585047,
+      "false_positive_rate": 0.0035669975186104217,
+      "confusion_matrix": {
+        "tn": 6425,
+        "fp": 23,
+        "fn": 62,
+        "tp": 6351
+      }
+    }
+  },
+  "n_train": 51445,
+  "n_test": 12861,
+  "n_unique_urls": 64306,
+  "seed": 42,
+  "dataset": "data\\clean_urls.csv",
+  "limitations": "Splits prevent the same exact URL from appearing in both train and test. Related domains (e.g. a.com vs login.a.com) are not grouped, because this project does not ship a public-suffix / registrable-domain table. Lexical URL features can overfit brand or dataset artefacts; metrics are only valid for the supplied labelled CSV."
+}
